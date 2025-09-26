@@ -14,27 +14,26 @@ jobs:
   download-boe:
     runs-on: ubuntu-latest
     steps:
-      - name: Create year folder
-        run: mkdir -p $(date +%Y)
+      - name: Set Variables
+        run: |
+          echo "YEAR_FOLDER=$(date +%Y)" >> $GITHUB_ENV
+          echo "DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
+          echo "ZIPFILE=${DATE}.zip" >> $GITHUB_ENV
 
       - name: Download BOE
         run: |
-          FECHA=$(date +%Y%m%d)
-          curl -o ${FECHA}.json -H "Accept: application/json" "https://boe.es/datosabiertos/api/boe/sumario/${FECHA}"
+          curl -o ${DATE}.json -H "Accept: application/json" "https://boe.es/datosabiertos/api/boe/sumario/${DATE}"
       
       - name: Compress response
         run: |
-          FECHA=$(date +%Y%m%d)
-          echo ${FECHA}
-          ZIPFILE="${FECHA}.zip"
-          echo ${ZIPFILE}
-          zip -9 $ZIPFILE $FECHA.json
-          mv $ZIPFILE $(date +%Y)/
-          rm $FECHA.json
+          zip -9 $ZIPFILE $DATE.json
+          mkdir -p $YEAR_FOLDER
+          mv $ZIPFILE $YEAR_FOLDER/
+          rm $DATE.json
           tree -L 2
           
       - name: Save BOE
         uses: actions/upload-artifact@v4
         with:
-          name: boe-$(date +%Y%m%d)
-          path: $(date +%Y)/$(date +%Y%m%d).zip
+          name: boe-$DATE
+          path: $YEAR_FOLDER/$ZIPFILE
