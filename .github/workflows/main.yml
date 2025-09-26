@@ -31,6 +31,7 @@ jobs:
           zip -9 $ZIPFILE $FECHA.json
           mv $ZIPFILE $(date +%Y)/
           rm $FECHA.json
+          tree -L 2
           
       - name: Save BOE
         uses: actions/upload-artifact@v4
