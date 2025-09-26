@@ -15,18 +15,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Create year folder
-        run: mkdir -p $(date +%Y) && ls
+        run: mkdir -p $(date +%Y)
 
       - name: Download BOE
         run: |
           FECHA=$(date +%Y%m%d)
-          echo ${FECHA}
           curl -o ${FECHA}.json -H "Accept: application/json" "https://boe.es/datosabiertos/api/boe/sumario/${FECHA}"
-          cat ${FECHA}.json
       
       - name: Compress response
         run: |
-          FECHA=$(date +%Y-%m-%d)
+          FECHA=$(date +%Y%m%d)
           echo ${FECHA}
           ZIPFILE="${FECHA}.zip"
           echo ${ZIPFILE}
@@ -37,5 +35,5 @@ jobs:
       - name: Save BOE
         uses: actions/upload-artifact@v4
         with:
-          name: boe-$(date +%Y-%m-%d)
+          name: boe-$(date +%Y%m%d)
           path: $(date +%Y)/*.zip
