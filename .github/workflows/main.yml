@@ -15,19 +15,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Create year folder
-        run: mkdir -p $(date +%Y)
+        run: mkdir -p $(date +%Y) && ls
 
       - name: Download BOE
         run: |
           FECHA=$(date +%Y-%m-%d)
+          echo ${FECHA}
           curl -o ${FECHA}.json "https://boe.es/datosabiertos/api/boe/sumario/${FECHA}"
+          cat ${FECHA}.json
       
       - name: Compress response
         run: |
           FECHA=$(date +%Y-%m-%d)
+          echo ${FECHA}
           ZIPFILE="${FECHA}.zip"
-          zip $ZIPFILE $FECHA.json
-          mkdir -p $(date +%Y)
+          echo ${ZIPFILE}
+          zip -9 $ZIPFILE $FECHA.json
           mv $ZIPFILE $(date +%Y)/
           rm $FECHA.json
           
