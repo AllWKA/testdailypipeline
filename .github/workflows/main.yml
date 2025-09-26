@@ -18,7 +18,8 @@ jobs:
         run: |
           echo "YEAR_FOLDER=$(date +%Y)" >> $GITHUB_ENV
           echo "DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
-          echo "ZIPFILE=${{env.DATE}}.zip" >> $GITHUB_ENV
+          echo ${{YEAR_FOLDER}}
+          echo ${{DATE}}
 
       - name: Download BOE
         run: |
