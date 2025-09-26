@@ -18,22 +18,22 @@ jobs:
         run: |
           echo "YEAR_FOLDER=$(date +%Y)" >> $GITHUB_ENV
           echo "DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
-          echo "ZIPFILE=${DATE}.zip" >> $GITHUB_ENV
+          echo "ZIPFILE=${{env.DATE}}.zip" >> $GITHUB_ENV
 
       - name: Download BOE
         run: |
-          curl -o ${DATE}.json -H "Accept: application/json" "https://boe.es/datosabiertos/api/boe/sumario/${DATE}"
+          curl -o ${{env.DATE}}.json -H "Accept: application/json" "https://boe.es/datosabiertos/api/boe/sumario/${{env.DATE}}"
       
       - name: Compress response
         run: |
-          zip -9 $ZIPFILE $DATE.json
+          zip -9 ${{env.ZIPFILE}} ${{env.DATE}}.json
           mkdir -p $YEAR_FOLDER
-          mv $ZIPFILE $YEAR_FOLDER/
-          rm $DATE.json
+          mv ${{env.ZIPFILE}} $YEAR_FOLDER/
+          rm ${{env.DATE}}.json
           tree -L 2
           
       - name: Save BOE
         uses: actions/upload-artifact@v4
         with:
-          name: boe-$DATE
-          path: $YEAR_FOLDER/$ZIPFILE
+          name: boe
+          path: ${{env.YEAR_FOLDER}}/${{env.ZIPFILE}}
