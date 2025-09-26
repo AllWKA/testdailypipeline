@@ -26,9 +26,9 @@ jobs:
       
       - name: Compress response
         run: |
-          zip -9 ${{env.ZIPFILE}} ${{env.DATE}}.json
-          mkdir -p $YEAR_FOLDER
-          mv ${{env.ZIPFILE}} $YEAR_FOLDER/
+          zip -9 ${{env.DATE}}.zip ${{env.DATE}}.json
+          mkdir -p ${{YEAR_FOLDER}}
+          mv ${{env.DATE}}.zip $YEAR_FOLDER/
           rm ${{env.DATE}}.json
           tree -L 2
           
@@ -36,4 +36,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: boe
-          path: ${{env.YEAR_FOLDER}}/${{env.ZIPFILE}}
+          path: ${{env.YEAR_FOLDER}}/${{env.DATE}}.zip
