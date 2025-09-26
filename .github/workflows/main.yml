@@ -1,0 +1,32 @@
+name: Descargar BOE Diario
+
+on:
+  schedule:
+    - cron: '0 12 * * *'
+
+jobs:
+  download-boe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create year folder
+        run: mkdir -p $(date +%Y)
+
+      - name: Download BOE
+        run: |
+          FECHA=$(date +%Y-%m-%d)
+          curl -o ${FECHA}.json "https://boe.es/datosabiertos/api/boe/sumario/${FECHA}"
+      
+      - name: Compress response
+        run: |
+          FECHA=$(date +%Y-%m-%d)
+          ZIPFILE="${FECHA}.zip"
+          zip $ZIPFILE $FECHA.json
+          mkdir -p $(date +%Y)
+          mv $ZIPFILE $(date +%Y)/
+          rm $FECHA.json
+          
+      - name: Save BOE
+        uses: actions/upload-artifact@v3
+        with:
+          name: boe-$(date +%Y-%m-%d)
+          path: $(date +%Y)/*.zip
