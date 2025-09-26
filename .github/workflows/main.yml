@@ -1,6 +1,12 @@
 name: Descargar BOE Diario
 
 on:
+  workflow_dispatch:
+    inputs:
+      run_reason:
+        description: 'Razón para esta ejecución manual'
+        required: false
+
   schedule:
     - cron: '0 12 * * *'
 
