@@ -19,9 +19,9 @@ jobs:
 
       - name: Download BOE
         run: |
-          FECHA=$(date +%Y-%m-%d)
+          FECHA=$(date +%Y%m%d)
           echo ${FECHA}
-          curl -o ${FECHA}.json "https://boe.es/datosabiertos/api/boe/sumario/${FECHA}"
+          curl -o ${FECHA}.json -H "Accept: application/json" "https://boe.es/datosabiertos/api/boe/sumario/${FECHA}"
           cat ${FECHA}.json
       
       - name: Compress response
