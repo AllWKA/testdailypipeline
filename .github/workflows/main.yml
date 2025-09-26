@@ -32,7 +32,7 @@ jobs:
           rm $FECHA.json
           
       - name: Save BOE
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: boe-$(date +%Y-%m-%d)
           path: $(date +%Y)/*.zip
