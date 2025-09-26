@@ -14,6 +14,9 @@ jobs:
   download-boe:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v3
+        
       - name: Set Variables
         run: |
           echo "YEAR_FOLDER=$(date +%Y)" >> $GITHUB_ENV
@@ -32,9 +35,14 @@ jobs:
           mv ${{env.DATE}}.zip ${{env.YEAR_FOLDER}}/
           rm ${{env.DATE}}.json
           tree -L 2
-          
+
+      - name: Configurar usuario Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+                    
       - name: Save BOE
-        uses: actions/upload-artifact@v4
-        with:
-          name: boe
-          path: ${{env.YEAR_FOLDER}}/${{env.DATE}}.zip
+        run: |
+          git add .
+          git commit -m "Añadir BOE del día $FECHA"
+          git push
